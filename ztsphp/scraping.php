@@ -20,6 +20,8 @@ if (!empty($_POST['xpath_of_ajax_btn'])) {
   $xpath_of_ajax_btn = null;
 }
 
+$xpath_of_table = $_POST['xpath_of_table'];
+
 $column_numbers_to_scrape = $_POST['column_numbers_to_scrape'];
 
 $titles = $_POST['titles'];
@@ -69,7 +71,7 @@ for ($i = 1; $i <= $pages; $i++) {
 }
 
 
-$future1 = $runtime1->run(function($url, $xpath_of_ajax_btn, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
+$future1 = $runtime1->run(function($url, $xpath_of_ajax_btn, $xpath_of_table, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
   require_once 'vendor/autoload.php';
 
   $host = 'http://selenium-hub:4444/wd/hub';
@@ -101,7 +103,7 @@ $future1 = $runtime1->run(function($url, $xpath_of_ajax_btn, $column_numbers_to_
       for ($k=0; $k < count($column_numbers_to_scrape); $k++) {
         try {
           $Is_this_td_row = 'y';
-          $td = $driver->findElement(WebDriverBy::xpath("//tbody/tr[$j]/td[$column_numbers_to_scrape[$k]]")); //Element
+          $td = $driver->findElement(WebDriverBy::xpath("$xpath_of_table/tbody/tr[$j]/td[$column_numbers_to_scrape[$k]]")); //Element
           array_push($scraped_row_data, $td->getText());
         }catch (NoSuchElementException $e) {
           $Is_this_td_row = 'n';
@@ -156,11 +158,11 @@ $future1 = $runtime1->run(function($url, $xpath_of_ajax_btn, $column_numbers_to_
   }
 
   return $scraped_data;
-}, array($url, $xpath_of_ajax_btn, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times_in_5_threads[0]));
+}, array($url, $xpath_of_ajax_btn, $xpath_of_table, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times_in_5_threads[0]));
 
 
 if ($pages >= 2) {
-  $future2 = $runtime2->run(function($url, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
+  $future2 = $runtime2->run(function($url, $xpath_of_table, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
     require_once 'vendor/autoload.php';
     $host = 'http://selenium-hub:4444/wd/hub';
     $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome(), 3600000, 3600000);
@@ -192,7 +194,7 @@ if ($pages >= 2) {
         for ($k=0; $k < count($column_numbers_to_scrape); $k++) {
           try {
             $Is_this_td_row = 'y';
-            $td = $driver->findElement(WebDriverBy::xpath("//tbody/tr[$j]/td[$column_numbers_to_scrape[$k]]")); //Element
+            $td = $driver->findElement(WebDriverBy::xpath("$xpath_of_table/tbody/tr[$j]/td[$column_numbers_to_scrape[$k]]")); //Element
             array_push($scraped_row_data, $td->getText());
           }catch (NoSuchElementException $e) {
             $Is_this_td_row = 'n';
@@ -247,12 +249,12 @@ if ($pages >= 2) {
     }
 
     return $scraped_data;
-  }, array($url, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times_in_5_threads[1]));
+  }, array($url, $xpath_of_table, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times_in_5_threads[1]));
 }
 
 
 if ($pages >= 3) {
-  $future3 = $runtime3->run(function($url, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
+  $future3 = $runtime3->run(function($url, $xpath_of_table, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
     require_once 'vendor/autoload.php';
     $host = 'http://selenium-hub:4444/wd/hub';
     $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome(), 3600000, 3600000);
@@ -284,7 +286,7 @@ if ($pages >= 3) {
         for ($k=0; $k < count($column_numbers_to_scrape); $k++) {
           try {
             $Is_this_td_row = 'y';
-            $td = $driver->findElement(WebDriverBy::xpath("//tbody/tr[$j]/td[$column_numbers_to_scrape[$k]]")); //Element
+            $td = $driver->findElement(WebDriverBy::xpath("$xpath_of_table/tbody/tr[$j]/td[$column_numbers_to_scrape[$k]]")); //Element
             array_push($scraped_row_data, $td->getText());
           }catch (NoSuchElementException $e) {
             $Is_this_td_row = 'n';
@@ -338,12 +340,12 @@ if ($pages >= 3) {
     }
 
     return $scraped_data;
-  }, array($url, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times_in_5_threads[2]));
+  }, array($url, $xpath_of_table, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times_in_5_threads[2]));
 }
 
 
 if ($pages >= 4) {
-  $future4 = $runtime4->run(function($url, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
+  $future4 = $runtime4->run(function($url, $xpath_of_table, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
     require_once 'vendor/autoload.php';
     $host = 'http://selenium-hub:4444/wd/hub';
     $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome(), 3600000, 3600000);
@@ -375,7 +377,7 @@ if ($pages >= 4) {
         for ($k=0; $k < count($column_numbers_to_scrape); $k++) {
           try {
             $Is_this_td_row = 'y';
-            $td = $driver->findElement(WebDriverBy::xpath("//tbody/tr[$j]/td[$column_numbers_to_scrape[$k]]")); //Element
+            $td = $driver->findElement(WebDriverBy::xpath("$xpath_of_table/tbody/tr[$j]/td[$column_numbers_to_scrape[$k]]")); //Element
             array_push($scraped_row_data, $td->getText());
           }catch (NoSuchElementException $e) {
             $Is_this_td_row = 'n';
@@ -430,12 +432,12 @@ if ($pages >= 4) {
     }
 
     return $scraped_data;
-  }, array($url, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times_in_5_threads[2]));
+  }, array($url, $xpath_of_table, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times_in_5_threads[2]));
 }
 
 
 if ($pages >= 5) {
-  $future5 = $runtime5->run(function($url, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
+  $future5 = $runtime5->run(function($url, $xpath_of_table, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times){
     require_once 'vendor/autoload.php';
     $host = 'http://selenium-hub:4444/wd/hub';
     $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome(), 3600000, 3600000);
@@ -467,7 +469,7 @@ if ($pages >= 5) {
         for ($k=0; $k < count($column_numbers_to_scrape); $k++) {
           try {
             $Is_this_td_row = 'y';
-            $td = $driver->findElement(WebDriverBy::xpath("//tbody/tr[$j]/td[$column_numbers_to_scrape[$k]]")); //Element
+            $td = $driver->findElement(WebDriverBy::xpath("$xpath_of_table/tbody/tr[$j]/td[$column_numbers_to_scrape[$k]]")); //Element
             array_push($scraped_row_data, $td->getText());
           }catch (NoSuchElementException $e) {
             $Is_this_td_row = 'n';
@@ -522,7 +524,7 @@ if ($pages >= 5) {
     }
 
     return $scraped_data;
-  }, array($url, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times_in_5_threads[2]));
+  }, array($url, $xpath_of_table, $column_numbers_to_scrape, $xpath_of_a, $xpaths_to_scrape_in_a_new_page, $rows, $text_of_next_btn, $page_moving_times_in_5_threads[2]));
 }
 
 
